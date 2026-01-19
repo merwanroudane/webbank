@@ -1,9 +1,6 @@
 streamlit
+plotly
 pandas
 numpy
-requests
-plotly
-scipy
-statsmodels==0.14.2
-openpyxl
-google-genai
+scipy==1.11.4
+statsmodels==0.14.1
