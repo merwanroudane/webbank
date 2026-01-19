@@ -2466,15 +2466,35 @@ def main():
                         numeric_cols
                     )
                     
+                    # إنشاء الرسم البياني بدون trendline (لتجنب مشاكل statsmodels)
                     fig_trend = px.scatter(
                         df,
                         x='السنة',
                         y=trend_indicator,
                         color='الدولة',
-                        trendline='ols',
                         title=f'📈 خط الاتجاه لـ {trend_indicator}',
                         color_discrete_sequence=['#D4AF37', '#B8960C', '#996515', '#8B7355', '#5D4E37']
                     )
+                    
+                    # إضافة خطوط الاتجاه يدوياً باستخدام numpy
+                    colors = ['#D4AF37', '#B8960C', '#996515', '#8B7355', '#5D4E37']
+                    for i, country in enumerate(df['الدولة'].unique()):
+                        country_df = df[df['الدولة'] == country].dropna(subset=['السنة', trend_indicator])
+                        if len(country_df) >= 2:
+                            x_vals = country_df['السنة'].values
+                            y_vals = country_df[trend_indicator].values
+                            # حساب خط الاتجاه الخطي
+                            z = np.polyfit(x_vals, y_vals, 1)
+                            p = np.poly1d(z)
+                            x_line = np.linspace(x_vals.min(), x_vals.max(), 100)
+                            y_line = p(x_line)
+                            fig_trend.add_scatter(
+                                x=x_line, y=y_line,
+                                mode='lines',
+                                name=f'اتجاه {country}',
+                                line=dict(color=colors[i % len(colors)], dash='dash', width=2),
+                                showlegend=False
+                            )
                     
                     fig_trend.update_layout(
                         font=dict(family="Cairo, Arial", color='#5D4E37'),
