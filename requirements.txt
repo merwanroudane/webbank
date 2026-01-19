@@ -3,7 +3,9 @@ pandas
 numpy
 requests
 plotly
+scipy
 statsmodels==0.14.2
 openpyxl
 google-genai
+
 
