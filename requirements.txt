@@ -1,6 +1,6 @@
 streamlit
-plotly
 pandas
 numpy
-scipy==1.11.4
-statsmodels==0.14.1
+plotly
+requests
+
